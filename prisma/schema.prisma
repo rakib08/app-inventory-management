@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PhoneStatus {
+  in_stock
+  reserved
+  sold
+}
+
+model Phone {
+  id            Int         @id @default(autoincrement())
+  brand         String
+  model         String
+  ram           Int
+  storage       Int
+  color         String
+
+  purchasePrice Decimal     @db.Decimal(12, 2)
+  sellingPrice  Decimal     @db.Decimal(12, 2)
+
+  quantity      Int
+  status        PhoneStatus @default(in_stock)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
