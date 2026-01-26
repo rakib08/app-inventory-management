@@ -1,5 +1,4 @@
 
-#########REST API########
 Server health check:
 => GET
 /health
