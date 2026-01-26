@@ -14,5 +14,4 @@ GET
 
 => Filter by (brand, model, pric range)
 
-URL:
-http://localhost:3000/phones?brand=apple
+/phones?brand=apple
