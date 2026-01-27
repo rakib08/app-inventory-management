@@ -5,7 +5,11 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.static("public"));
+
+
 // test route (health check)
+
 app.get("/health", (req, res) => {
   res.json({ ok: true, message: "Inventory API is running" });
 });

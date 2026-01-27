@@ -6,7 +6,7 @@
     "prisma": "^6.19.2"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.25.2",
