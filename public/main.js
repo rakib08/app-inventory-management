@@ -52,20 +52,24 @@ function renderPhones(phones) {
     }
 }
 
-async function loadPhones(clearMsg = true) {
+// load table
+async function loadPhones(filters = {}) {
     tbody.innerHTML = `
     <tr>
       <td colspan="11" class="text-center py-4">Loading...</td>
     </tr>
   `;
+    msgBox.innerHTML = '';
 
-    if (clearMsg) msgBox.innerHTML = '';
+    const params = new URLSearchParams();
+    if (filters.brand) params.set('brand', filters.brand);
+    if (filters.model) params.set('model', filters.model);
+
+    const url = params.toString() ? `/phones?${params.toString()}` : '/phones';
 
     try {
-        const res = await fetch('/phones');
-        if (!res.ok) {
-            throw new Error(`Request failed: ${res.status}`);
-        }
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
 
         const phones = await res.json();
         renderPhones(phones);
@@ -78,9 +82,9 @@ async function loadPhones(clearMsg = true) {
 
 // auto load
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => loadPhones(true));
+    document.addEventListener('DOMContentLoaded', () => loadPhones());
 } else {
-    loadPhones(true);
+    loadPhones();
 }
 
 // addPhones
@@ -136,7 +140,7 @@ if (phoneForm) {
 
             showMsg('success', 'Phone added successfully');
             phoneForm.reset();
-            await loadPhones(false);
+            await loadPhones();
         } catch (err) {
             console.error(err);
             showMsg('danger', 'Server error while adding phone.');
@@ -144,4 +148,26 @@ if (phoneForm) {
     });
 }
 
-// phone sort
+// sort
+const searchBrand = document.getElementById('searchBrand');
+const searchModel = document.getElementById('searchModel');
+const searchBtn = document.getElementById('searchBtn');
+const clearBtn = document.getElementById('clearBtn');
+
+if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
+        const brand = searchBrand ? searchBrand.value.trim() : '';
+        const model = searchModel ? searchModel.value.trim() : '';
+
+        loadPhones({ brand, model });
+    });
+}
+
+if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+        if (searchBrand) searchBrand.value = '';
+        if (searchModel) searchModel.value = '';
+
+        loadPhones();
+    });
+}
