@@ -2,12 +2,23 @@ const tbody = document.getElementById('phonesTbody');
 const msgBox = document.getElementById('msg');
 const phoneForm = document.getElementById('phoneForm');
 
+// message Box
+function clearMsg() {
+    msgBox.innerHTML = '';
+}
+
 function showMsg(type, text) {
     msgBox.innerHTML = `
     <div class="alert alert-${type} mb-0" role="alert">
       ${text}
+      <button type="button" class="btn-close" aria-label="Close" id="msgCloseBtn"></button>
     </div>
   `;
+
+    const btn = document.getElementById('msgCloseBtn');
+    if (btn) {
+        btn.addEventListener('click', clearMsg); // Fixed: lowercase 'click' and correct function name
+    }
 }
 
 // Render Phones Table
@@ -52,6 +63,10 @@ function renderPhones(phones) {
     }
 }
 
+const refreshBtn = document.getElementById('refreshBtn');
+
+refreshBtn.addEventListener('click', loadPhones);
+
 // load table
 async function loadPhones(filters = {}) {
     tbody.innerHTML = `
@@ -59,7 +74,6 @@ async function loadPhones(filters = {}) {
       <td colspan="11" class="text-center py-4">Loading...</td>
     </tr>
   `;
-    msgBox.innerHTML = '';
 
     const params = new URLSearchParams();
     if (filters.brand) params.set('brand', filters.brand);
@@ -148,7 +162,7 @@ if (phoneForm) {
     });
 }
 
-// sort
+// search/filter
 const searchBrand = document.getElementById('searchBrand');
 const searchModel = document.getElementById('searchModel');
 const searchBtn = document.getElementById('searchBtn');
