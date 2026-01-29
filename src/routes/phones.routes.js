@@ -105,7 +105,7 @@ router.delete('/:id', async (req, res, next) => {
         const id = Number(req.params.id);
         if (!Number.isInteger(id)) {
             return res.status(400).json({ error: 'Invalid id!' });
-        }
+        }  
 
         await prisma.phone.delete({ where: { id } });
 
